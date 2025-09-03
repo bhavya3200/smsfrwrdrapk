@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.content.edit
 
 class ForwardService : Service() {
     companion object {
@@ -66,6 +67,6 @@ class ForwardService : Service() {
 fun bumpCounter(context: Context) {
     val p = context.getSharedPreferences("cfg", 0)
     val n = p.getInt("sentCount", 0) + 1
-    p.edit().putInt("sentCount", n).apply()
+    p.edit { putInt("sentCount", n) }
     ForwardService.updateCounter(context, n)
 }

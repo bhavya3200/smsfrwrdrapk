@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import com.bhavya.smsrelay.databinding.FragmentSettingsBinding
 
@@ -25,15 +26,15 @@ class SettingsFragment : Fragment() {
         b.etWaTo.setText(p.getString("waTo",""))
 
         b.btnSaveSettings.setOnClickListener {
-            p.edit()
-                .putBoolean("viaTelegram", b.cbViaTelegram.isChecked)
-                .putString("botToken", b.etBotToken.text.toString().trim())
-                .putString("chatId", b.etChatId.text.toString().trim())
-                .putBoolean("viaWa", b.cbViaWa.isChecked)
-                .putString("waPhoneNumberId", b.etWaPhoneId.text.toString().trim())
-                .putString("waToken", b.etWaToken.text.toString().trim())
-                .putString("waTo", b.etWaTo.text.toString().trim())
-                .apply()
+            p.edit {
+                putBoolean("viaTelegram", b.cbViaTelegram.isChecked)
+                putString("botToken", b.etBotToken.text.toString().trim())
+                putString("chatId", b.etChatId.text.toString().trim())
+                putBoolean("viaWa", b.cbViaWa.isChecked)
+                putString("waPhoneNumberId", b.etWaPhoneId.text.toString().trim())
+                putString("waToken", b.etWaToken.text.toString().trim())
+                putString("waTo", b.etWaTo.text.toString().trim())
+            }
             Toast.makeText(requireContext(), "Saved", Toast.LENGTH_SHORT).show()
         }
         return b.root

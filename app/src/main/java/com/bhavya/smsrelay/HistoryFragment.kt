@@ -16,13 +16,23 @@ class HistoryFragment : Fragment() {
     // Initialize when view is created
     private lateinit var adapter: LogsAdapter
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = LogsAdapter()
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
-        val logs: List<LogItem> = loadLogsFromDbOrPrefs() // your source
+        val logs = LogStore.readAll(requireContext())
         adapter.submitList(logs)
     }
 
@@ -30,7 +40,7 @@ class HistoryFragment : Fragment() {
         super.onResume()
         // Refresh data when returning to this screen
         val items = LogStore.readAll(requireContext())
-        adapter.submitList(items) // or adapter.submit(items) if that's your API
+        adapter.submitList(items)
     }
 
     override fun onDestroyView() {
