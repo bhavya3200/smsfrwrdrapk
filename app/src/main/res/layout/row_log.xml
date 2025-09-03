@@ -1,0 +1,15 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:padding="12dp"
+    android:background="@color/surface"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <TextView android:id="@+id/tvWhen" android:textStyle="bold"
+        android:textColor="@color/on_surface" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView android:id="@+id/tvFrom" android:textColor="@color/on_surface"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    <TextView android:id="@+id/tvBody" android:textColor="@color/on_surface"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    <TextView android:id="@+id/tvResult" android:textColor="@color/on_surface"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+</LinearLayout>

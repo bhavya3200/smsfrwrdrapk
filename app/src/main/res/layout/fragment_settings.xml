@@ -1,0 +1,39 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="16dp" android:orientation="vertical">
+
+        <CheckBox android:id="@+id/cbViaTelegram"
+            android:text="Forward via Telegram" android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <EditText android:id="@+id/etBotToken"
+            android:hint="Telegram BOT_TOKEN"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <EditText android:id="@+id/etChatId"
+            android:hint="Telegram chat_id or @channel_username"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <CheckBox android:id="@+id/cbViaWa"
+            android:text="Forward via WhatsApp Cloud API"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+
+        <EditText android:id="@+id/etWaPhoneId"
+            android:hint="WA Phone Number ID"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <EditText android:id="@+id/etWaToken"
+            android:hint="WA Bearer Token"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <EditText android:id="@+id/etWaTo"
+            android:hint="WA recipient (e.g., 91XXXXXXXXXX)"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <Button android:id="@+id/btnSaveSettings" android:text="Save"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"/>
+    </LinearLayout>
+</ScrollView>

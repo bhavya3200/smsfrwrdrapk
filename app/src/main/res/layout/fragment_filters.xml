@@ -1,0 +1,46 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="16dp" android:orientation="vertical">
+
+        <CheckBox android:id="@+id/cbEnabled"
+            android:text="Activate forwarding" android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnGrantNotifAccess"
+            android:text="Grant Notification Access"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+
+        <EditText android:id="@+id/etTimezone"
+            android:hint="Time zone (e.g., Asia/Kolkata)"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <CheckBox android:id="@+id/cbSkipOtp"
+            android:text="Skip OTP-like messages"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"/>
+
+        <EditText android:id="@+id/etWhitelist" android:minLines="3"
+            android:hint="Whitelist senders (one per line)"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <EditText android:id="@+id/etBlacklist" android:minLines="3"
+            android:hint="Blacklist senders (one per line)"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <EditText android:id="@+id/etOnlyKeywords" android:minLines="3"
+            android:hint="Only-if keywords (one per line)"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <EditText android:id="@+id/etNeverKeywords" android:minLines="3"
+            android:hint="Never-if keywords (one per line)"
+            android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+        <Button android:id="@+id/btnSave" android:text="Save"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"/>
+    </LinearLayout>
+</ScrollView>

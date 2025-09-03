@@ -1,0 +1,11 @@
+<resources>
+    <style name="Theme.SMSRelay.Light" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorSurface">@color/surface</item>
+        <item name="android:colorBackground">@color/silver_background</item>
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="colorPrimary">@color/accent</item>
+        <item name="colorPrimaryContainer">@color/silver_background</item>
+        <item name="colorOnPrimary">@color/surface</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>
