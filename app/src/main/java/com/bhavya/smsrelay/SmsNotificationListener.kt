@@ -11,6 +11,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+import com.bhavya.smsrelay.LogItem
 
 class SmsNotificationListener : NotificationListenerService() {
 
@@ -76,7 +77,7 @@ class SmsNotificationListener : NotificationListenerService() {
             }
         }
 
-        LogStore.append(this, LogEntry(System.currentTimeMillis(), title, bodyText, "forwarded"))
+        LogStore.append(this, LogItem(System.currentTimeMillis(), title, bodyText))
     }
 
     private fun parseList(raw: String?): List<String> =
