@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import android.Manifest
+import android.content.pm.PackageManager
 
 class ForwardService : Service() {
     companion object {
@@ -17,6 +19,10 @@ class ForwardService : Service() {
         }
 
         fun updateCounter(ctx: Context, count: Int) {
+            if (Build.VERSION.SDK_INT >= 33 &&
+                ctx.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                return
+            }
             val nm = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (Build.VERSION.SDK_INT >= 26) {
                 val ch = NotificationChannel(CH_ID, "SMS Relay Service", NotificationManager.IMPORTANCE_LOW)

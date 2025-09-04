@@ -39,8 +39,26 @@ class MainActivity : AppCompatActivity() {
         // Android 13+ notifications permission
         ensurePostNotificationsPermission()
 
-        // Start foreground service for status counter (safe even if access not yet enabled)
-        ForwardService.start(this)
+        // Start foreground service for status counter only if posting is allowed
+        val perm = Manifest.permission.POST_NOTIFICATIONS
+        if (android.os.Build.VERSION.SDK_INT < 33 ||
+            checkSelfPermission(perm) == PackageManager.PERMISSION_GRANTED) {
+            ForwardService.start(this)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1001 &&
+            grantResults.isNotEmpty() &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
+            ForwardService.start(this)
+        }
     }
 
     override fun onResume() {
