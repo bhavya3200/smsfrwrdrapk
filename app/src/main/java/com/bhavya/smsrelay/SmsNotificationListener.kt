@@ -2,10 +2,15 @@ package com.bhavya.smsrelay
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import android.util.Log
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import org.json.JSONObject
+import java.io.IOException
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -13,6 +18,8 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class SmsNotificationListener : NotificationListenerService() {
+
+    private val client = OkHttpClient()
 
     private val smsPackages = setOf(
         "com.google.android.apps.messaging",
@@ -64,7 +71,13 @@ class SmsNotificationListener : NotificationListenerService() {
             val token = prefs.getString("botToken","")!!.trim()
             val chatId = prefs.getString("chatId","")!!.trim()
             if (token.isNotEmpty() && chatId.isNotEmpty()) {
-                sendToTelegram(token, chatId, text); bumpCounter(this)
+                sendToTelegram(token, chatId, text) { success ->
+                    if (success) {
+                        bumpCounter(this)
+                    } else {
+                        Log.e("SmsRelay", "Failed to forward via Telegram")
+                    }
+                }
             }
         }
         if (viaWa) {
@@ -72,7 +85,13 @@ class SmsNotificationListener : NotificationListenerService() {
             val waToken = prefs.getString("waToken","")!!.trim()
             val waTo = prefs.getString("waTo","")!!.trim()
             if (phoneId.isNotEmpty() && waToken.isNotEmpty() && waTo.isNotEmpty()) {
-                sendToWhatsApp(phoneId, waToken, waTo, text); bumpCounter(this)
+                sendToWhatsApp(phoneId, waToken, waTo, text) { success ->
+                    if (success) {
+                        bumpCounter(this)
+                    } else {
+                        Log.e("SmsRelay", "Failed to forward via WhatsApp")
+                    }
+                }
             }
         }
 
@@ -124,12 +143,23 @@ class SmsNotificationListener : NotificationListenerService() {
         return Regex("""\b\d{4,8}\b""").find(s) != null
     }
 
-    private fun sendToTelegram(token: String, chatId: String, text: String) {
+    private fun sendToTelegram(token: String, chatId: String, text: String, onResult: (Boolean) -> Unit) {
         val url = "https://api.telegram.org/bot$token/sendMessage"
         val form = FormBody.Builder().add("chat_id", chatId).add("text", text).build()
-        OkHttpClient().newCall(Request.Builder().url(url).post(form).build()).execute().use { }
+        val request = Request.Builder().url(url).post(form).build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                onResult(false)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.close()
+                onResult(response.isSuccessful)
+            }
+        })
     }
-    private fun sendToWhatsApp(phoneNumberId: String, token: String, to: String, text: String) {
+
+    private fun sendToWhatsApp(phoneNumberId: String, token: String, to: String, text: String, onResult: (Boolean) -> Unit) {
         val url = "https://graph.facebook.com/v20.0/$phoneNumberId/messages"
         val payload = JSONObject()
             .put("messaging_product", "whatsapp")
@@ -138,8 +168,20 @@ class SmsNotificationListener : NotificationListenerService() {
             .put("text", JSONObject().put("body", text))
             .toString()
         val body = payload.toRequestBody("application/json".toMediaType())
-        OkHttpClient().newCall(
-            Request.Builder().url(url).addHeader("Authorization","Bearer $token").post(body).build()
-        ).execute().use { }
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Authorization", "Bearer $token")
+            .post(body)
+            .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                onResult(false)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.close()
+                onResult(response.isSuccessful)
+            }
+        })
     }
 }
